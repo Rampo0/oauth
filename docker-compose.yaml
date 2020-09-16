@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  oauth:
+    build: 
+      context: .
+    volumes: 
+      - ./:/go/src/github.com/rampo0/multi-lang-microservice/oauth
+    image: rampooco/oauth
+    container_name: multi-oauthv2
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on: 
+      - cassandra
+    networks:
+      - default-net
+    environment: 
+      USERS_SERVICE : cassandra
+
+  cassandra:
+    image: cassandra:latest
+    container_name: oauth_cassandradb
+    restart: on-failure
+    volumes:
+      - ../infra/cassandra/data:/var/lib/cassandra
+    networks:
+      - default-net
+      
+networks:
+  default-net:
+
+
+
